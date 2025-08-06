@@ -3,6 +3,7 @@
 //compile language-> C++
 console.log("hello world");
 // interpreted language can partially run until error comes
+a = 10;
 console.log(a);
 
 // JS-> Dynamic language - can be changed[data type] -- might bring run time error, thats why typescript is used to make js more static
@@ -21,3 +22,13 @@ function add(a, b) {
 }
 const value = add(2, 3);
 console.log(value); 
+//settimeout
+//callback function
+setTimeout(() => {
+    console.log("hello");
+}, 3000);
+
+//setinterval
+setInterval(() => {
+    console.log("hello");
+}, 1000);
