@@ -1,3 +1,6 @@
+// func is a set of statements that performs a task or calculates a value
+
+
 //length
 function getLength(str) {
   console.log("Original String:", str);
