@@ -8,5 +8,9 @@
 /*
 -> its the client throwing some information to the server
 and the server throwing back some information to the client.
-/
+--> common methods-GET
+                  -POST
+                  -PUT
+                  -DELETE
+
 */
