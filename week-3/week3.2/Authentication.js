@@ -62,9 +62,14 @@ app.get('/user', (req, res) => {
         res.status(401).json({
             message: 'Unauthorized'
         })
-    }
+    } 
 })
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 })
+/*
+JWT  createa a tokens
+User get back atoken after the sign in request
+user sends back the tokens in all authenticated requests
+*/
