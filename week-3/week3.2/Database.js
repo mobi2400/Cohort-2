@@ -6,7 +6,7 @@ It scales well and is a decent choice for most use cases
 */
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb+srv://mobi:<password>@cluster0.o2i01ql.mongodb.net/test');
+mongoose.connect(process.env.DATABASE_URL);
 
 const User = mongoose.model('User', { name: String,email:String,password:String }); // Define a model
 
