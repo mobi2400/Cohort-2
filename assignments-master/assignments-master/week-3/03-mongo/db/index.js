@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 // Connect to MongoDB
 mongoose.connect('mongodb+srv://mobi:1234@cluster0.o2i01ql.mongodb.net/test');

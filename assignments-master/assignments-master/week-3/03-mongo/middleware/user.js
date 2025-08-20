@@ -1,4 +1,4 @@
-import { User } from '../db';
+import { User } from '../db/index.js';
 function userMiddleware(req, res, next) {
     const username = req.headers.username;
     const password = req.headers.password;
