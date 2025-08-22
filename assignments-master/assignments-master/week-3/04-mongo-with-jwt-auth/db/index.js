@@ -1,19 +1,26 @@
 const mongoose = require('mongoose');
+import {z} from 'zod';
 
 // Connect to MongoDB
-mongoose.connect('your-mongodb-url');
+mongoose.connect(process.env.DATABASE_URI);
 
 // Define schemas
-const AdminSchema = new mongoose.Schema({
-    // Schema definition here
+const AdminSchema = z.object({
+     username:z.string(),
+     password:z.string()
 });
 
-const UserSchema = new mongoose.Schema({
-    // Schema definition here
+const UserSchema = z.object({
+    username:z.string(),
+    password:z.string(),
+    purchasedCourses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Course' }]
 });
 
-const CourseSchema = new mongoose.Schema({
+const CourseSchema = z.object({
     // Schema definition here
+    title: z.string(),
+    description: z.string(),
+    price: z.number(),
 });
 
 const Admin = mongoose.model('Admin', AdminSchema);
