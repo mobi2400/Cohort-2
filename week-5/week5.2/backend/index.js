@@ -1,5 +1,6 @@
-const express = require('express');
-import {createTodos} from "./types.js";
+import 'dotenv/config';
+import express from "express";
+import { createTodos } from './types.js';
 import {Todo} from "./db.js";
 
 const app = express();

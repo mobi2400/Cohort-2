@@ -1,4 +1,4 @@
-const zod = require("zod");
+import zod from "zod";
 
 const createTodos = zod.object({
     title: zod.string(),
@@ -11,7 +11,7 @@ const updateTodo = zod.object({
 
 
 
-module.exports = {
+export  {
     createTodos,
     updateTodo
 }
