@@ -49,7 +49,7 @@ function App() {
   )
 }
 ```
-#### Important syntax
+## Important syntax
 ```JS
 const [count,setCount] = useState(0)
 ```
@@ -73,7 +73,7 @@ const Header = React.memo(({count})=>{
 - this will not get re-render even after App is re-render untill this xml code props gets changed
 - this gets you freedom to declare thing as usual
 
-### Basic thing
+## Basic thing
 - JSX is a js file where you can write HTML code
 - A component can only return a single top level xml
   - xml are the HTML code inside jsx
@@ -82,3 +82,31 @@ const Header = React.memo(({count})=>{
 - but if child gets re-render then only childs get re-render
   - its important to make your code optimal
   - dont normallly declare any state in parent div if used by child it makes the parent also re-rnder which eventually makees all the child re render
+- always use unique key while passing an array 
+### Wrapper components
+  - components that take inner react componenet as input
+  - ```<CardWrapper innercomponent={<TextComponent />}/>```
+- better way to create a wrapper is
+```js
+function CardWrapper({children}){
+  return <div>{children}</div>
+}
+// now after importing it in App.jsx
+<CardWrapper>
+  <TextComponent />// it takes everything as an input
+</CardWrapper>
+```
+
+### Hooks
+- functions start with use are called Hooks
+  - useEffect
+  - useState
+  - useRef
+  - useContext
+  - useReducer
+  - useMemo
+  - useCallback
+  - useLayoutEffect
+  - useImperativeHandle
+- Hooks in React are functions that allow you to use state and other React features without writing a class.
+- they allow you to "hook into" React state and lifecycle features from functional components. 
