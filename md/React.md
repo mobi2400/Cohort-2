@@ -49,8 +49,36 @@ function App() {
   )
 }
 ```
+#### Important syntax
+```JS
+const [count,setCount] = useState(0)
+```
+  - here count is a varaible which initially stores value 0 as declared
+  - setCount is the function which can perfrom some operations and change the value of count and count will store it dynamically wuthout hard refresshing the page
+  - ```setCount(count + 1)``` here count is getting increment by 1 all the time 
+  - generally it is used when we want to change the value of an varaible 
+  all the time
+
+### memo
+- memo lets you skip re-rendring a component when its props are unchanged
+```js
+const Header = React.memo(({count})=>{
+  return (
+    <>
+    {count}
+    </>
+  )
+})
+```
+- this will not get re-render even after App is re-render untill this xml code props gets changed
+- this gets you freedom to declare thing as usual
 
 ### Basic thing
 - JSX is a js file where you can write HTML code
-- A component can only return a single top level xml[xml are the HTML code inside jsx]
+- A component can only return a single top level xml
+  - xml are the HTML code inside jsx
   - it makes it easy to do reconciliation
+- if parent gets re-render then all the children gets re-render
+- but if child gets re-render then only childs get re-render
+  - its important to make your code optimal
+  - dont normallly declare any state in parent div if used by child it makes the parent also re-rnder which eventually makees all the child re render
