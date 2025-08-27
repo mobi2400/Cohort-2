@@ -52,3 +52,5 @@ function App() {
 
 ### Basic thing
 - JSX is a js file where you can write HTML code
+- A component can only return a single top level xml[xml are the HTML code inside jsx]
+  - it makes it easy to do reconciliation
