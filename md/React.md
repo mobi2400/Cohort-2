@@ -234,3 +234,55 @@ const [selectedId,setSelectedId] = useState(1);
 ```
 
 #### useMemos
+- memoization
+  - its mildy a DSA concecpt
+  - it means remembering some output given an input and not computing it again
+  - saving output in cache 
+```js
+let count = useMemo(()=>{
+let finalcount = 0;
+for(let i=0;i<=inputvalue;i++){
+  finalcount+=i;
+}
+return finalcount;
+},[inputvalue])
+// it only run if inputvalue changes
+```
+- different from useEffect 
+- used ver less
+- useEffect approach feel free to use any of them
+```js
+useEffect(()=>{
+   let finalcount = 0;
+for(let i=0;i<=inputvalue;i++){
+  finalcount+=i;
+}
+setcount(finalcount)
+},[inputvalue])
+```
+#### useCallback
+- use to build userinterface
+- it is used to memorized functions
+  - which help in optimizing the performance of your application
+  - especially in cases involving child components
+    thet rely on refernce equality to prevent unnecessary re-renders
+```js
+function App(){
+var a = useCallback(()=>{
+  console.log('hello')
+},[])
+return (
+  <Demo a={a}/> // this wont be called untill unless a changes
+)
+}
+function Demo(a){
+  return (
+    <h1>
+    hi therec
+    <button onClick={a}>click me</button>
+    </h1>
+  )
+}
+// it wont re-render unncecesaary
+```
+
