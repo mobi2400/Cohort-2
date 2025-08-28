@@ -110,3 +110,127 @@ function CardWrapper({children}){
   - useImperativeHandle
 - Hooks in React are functions that allow you to use state and other React features without writing a class.
 - they allow you to "hook into" React state and lifecycle features from functional components. 
+- this lead to a more concise and readable of way of writting components in react
+  #### Side Effects
+    - performing Dom manipulation directly which effect the rebdering of the componenets
+    - example
+    ```js
+    setTimeout
+    fetch
+    setInterval
+    document.getElementById("").innerHTML = ""
+    ```  
+#### useState
+- lets you describe the state of your app whenever state updates, it triggers a re-render which finally results in DOM updates
+- ``` const [count,setCount] = useState(0)```
+- this is enough to make your website dynamic
+- creates problem while hitting the backend
+#### useEffect
+- use to build interface in react
+- it allows to perform side effect in function components
+- Side effects are operations that can efect other components or cant be done during rendering, such as data fetching or manually changing the DOM in react components
+- example
+```js
+// it prevents to fetch data every time page renders
+useEffect(()=>{
+  fetch('url').then(async (res)=>{
+    const json = await res.json();
+    setTodos(json.todos)
+  }) 
+  },[])// [] gives how many time data should be fetch here it will be fetch only one time
+```
+- this is how backend is called with the help of axios
+```js
+useEffect(() => {
+    axios.get('https://dummyjson.com/todos/')
+    .then(res => {
+      setTodos(res.data.todos)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+    
+  },[])
+
+```
+- map is used to take all the data and display it
+```js
+     {todos.map((todo) => (
+        <div key={todo.id}>
+          <h1>{todo.title}</h1>
+          <p>{todo.description}</p>
+        </div>
+      ))}
+```
+#### warning
+```js
+async function main(){
+  const response = await axios.get("URL"
+  setTodos(response.data.todos)
+  )
+}
+useEffect(()=>{
+  main()
+},[count])
+// never do this it has major security issue
+// every time  count change main will be called nd meanwhile count will change and main will be called again and still first call data is not fetched
+```
+### Problem- fetch only todo with certain id
+```js
+function App(){
+  return <div>
+  <Todo id={3}>
+  </div>
+}
+```
+```js
+function Todo({id}){
+  const [todo,setTodo] = useState(null)
+ useEffectt(()={
+  axios.get(`https://dummyjson.com/todos/${id}`)
+  .then(res=>{
+    setTodo(res.data)
+  })
+  .catch(err=>{
+    console.log(err)
+  })
+ },[]) 
+ return (
+  <div>
+  <h1>{todo.title}</h1>
+  <p>{todo.description}</p>
+  </div>
+ )
+}
+```
+```js
+// you can also create a button to get id
+const [selectedId,setSelectedId] = useState(1);
+
+<button onClick={(
+  setSelectedId(1)
+)}>1</button>
+<button onClick={(
+  setSelectedId(2)
+)}>2</button>
+<button onClick={(
+  setSelectedId(3)
+)}>3</button>
+<button onClick={(
+  setSelectedId(4)
+)}>4</button>
+<Todo id={selectedId}>
+```
+```js
+ useEffectt(()={
+  axios.get(`https://dummyjson.com/todos/${id}`)
+  .then(res=>{
+    setTodo(res.data)
+  })
+  .catch(err=>{
+    console.log(err)
+  })
+ },[id]) // id should be given as whenever ut gets change u need to fetch data again
+```
+
+#### useMemos
