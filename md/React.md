@@ -285,4 +285,93 @@ function Demo(a){
 }
 // it wont re-render unncecesaary
 ```
+## Routing
+- react-router-dom
+  - its is the router for dom
+  - one of the routing widely famous
+- ``` npm i react-router-dom``` to install the dependecy
+```js
+function App(){
+  return (
+     <div>
+        <button OnClick={() => { 
+          // this is the global address 
+          window.location.href = "/"
+        }}>Home</button>
+        <button onClick={() => {
+          window.location.href = "/dashboard"
+        }}>Dashboard</button>
+      </div>
+    <BrowserRouter> // Function react-router gives
+    <Routes>
+      <Route path="/dashboard" element={<Dashboard/>}/>
+      <Route path="/" element={<Landing/>}/>
+    </Routes>
+    </BrowserRouter>
+  )
+}
+
+```
+### problem
+- by above routing the page is reloding every time
+- above is not client side routing
+    - Client-side routing is a technique used in modern web development, particularly in Single-Page Applications (SPAs), to handle navigation within a website or application without requiring a full page reload from the server. This results in a much faster and smoother user experience, similar to that of a native desktop or mobile application
+### Solution
+- use hooks
+```js
+// not an actual code its a psuedo code
+import {useNavigate} from "react-router-dom"
+export default function Dashbaord(){
+  const navigate = useNavigate();
+  function handleClick(){
+    navigate('/')
+  }
+  return(
+    <div>
+    <button onClick={handleClick}>Click to navigate</button>
+    </div>
+  )
+}
+// this hooks and navigate works only under <BrowserRouter>
+// make different component to define all the routing logic then import it in app and add under <browserRouter>
+```
+#### Actaul code
+- this will solve all rerendering issue and hard refresh
+```js
+function Appbar(){
+  const navigate = useNavigate();// import from react-router-dom
+  <button onClick={()={
+    naviagte("/")
+  }}>Home</button>
+  <button onClick={()={
+    naviagte("/dashboard")
+  }}>Dashboard</button>
+}
+```
+```js
+function App(){
+  return (
+    <div>
+    <BrowserRouter>
+      <Appbar/> // all logic is defined here
+      <Routes>
+         <Route path="/dashboard" element={<Dashboard/>}/>
+         <Route path="/" element={<Landing/>}/>
+      </Routes>
+    </BrowserRouter>
+    </div>
+  )
+}
+```
+### Routing Lazy loading
+- this load the only page in which user is and load other page if user goes there
+- slowly load the pages which user want specifily instead of loading the whole website
+- this how you bind any component in lazy
+  - ``` const Dashboard = React.lazy(()=> import("./components/Dashboard"))```
+  - generally this is done with heavy components
+  - components which take more time than usual in loading
+  - ``` <Route path="/" element={<Suspense fallback={"laoding..."}><Landing/></Suspense>}/>```
+  - Make sure to cover your component with this other wise it will throw an error
+  - ```<Suspense fallback={"laoding..."}></Suspense>
+
 
