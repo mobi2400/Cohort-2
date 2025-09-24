@@ -374,4 +374,27 @@ function App(){
   - Make sure to cover your component with this other wise it will throw an error
   - ```<Suspense fallback={"laoding..."}></Suspense>
 
+## Prop Drilling
+- Passing props is a great way to explicitly pipe data through your Ul tree to the components that use it.
+But passing props can become verbose and inconvenient when you need to pass some prop deeply through the tree, or if many components need the same prop. The nearest common ancestor could be far removed from the components that need data, and lifting state up that high can lead to a situation called "prop drilling".
 
+## Context API
+- fix Prop drilling
+- teleport state variable without driling
+- If you use the context api, you are pushing your state management outside the code react components
+```js
+import { createContext } from "react";
+export const CountContext = createContext(0);
+
+```
+- now warp the components who want to use teleported value
+```js
+<CountContext.Provider value={count}>
+<Count count={count} setCount={setCount} />
+</CountContext.Provider>
+```
+- remove props from the components who are using it
+```js
+// alternative for props
+const count = useContext(CountContext)
+```
