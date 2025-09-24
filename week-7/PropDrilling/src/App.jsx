@@ -1,11 +1,14 @@
-import { useState } from "react"
+import { useState, useContext } from "react"
+import { CountContext } from "./context"
 
 function App() {
   const [count, setCount] = useState(0);
-  
+  // wrap any components that wants to use the value inside a provider
   return (
     <div>
+      <CountContext.Provider value={count}>
       <Count count={count} setCount={setCount} />
+      </CountContext.Provider>
     </div>
   )
 }
@@ -17,13 +20,15 @@ function Count({count, setCount}) {
   </div>
 }
 
-function CountRenderer({count}) {
+function CountRenderer() {
+  const count = useContext(CountContext)
   return <div>
     {count}
   </div>
 }
 
-function Buttons({count, setCount}) {
+function Buttons({ setCount}) {
+  const count = useContext(CountContext)
   return <div>
     <button onClick={() => {
       setCount(count + 1)
