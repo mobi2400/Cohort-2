@@ -398,3 +398,241 @@ export const CountContext = createContext(0);
 // alternative for props
 const count = useContext(CountContext)
 ```
+## Custom Hooks
+- They are functions that let you "hook into" react state and lifecycle features from functional components.
+- Custom hooks are a way to reuse stateful logic between different components without changing their component hierarchy`
+- A custom hook is effectively a function, but with the following properties:
+  - Its name starts with "use" (e.g., useFetch, useAuth).
+  - Uses another hooks internally(like useState, useEffect, etc.) 
+### Data fetching custom hook
+- used to fetch data from backend
+```js
+import { useState, useEffect } from "react";
+import axios from "axios";
+// potential problem - if multiple component use this hook then data will be fetched multiple time
+// backend will be hit multiple time whenever App component is mounted
+
+function App(){
+  const [data,setData]= useState([]); // data is an array of object
+  useEffect(()=>{
+    //axios fetch data in json format and convert it into object
+    axios.get("https://dummyjson.com/todos")
+    .then(res=>{
+      setData(res.data.todos) // todos is an array of object
+      //res.data is an object
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+  },[]) // [] means it will be called only once
+  return(
+    <div>
+    // map is used to take all the data and display it
+      {todos.map((todo)=>(
+        <div key={todo.id}>
+          <h1>{todo.title}</h1>
+          <p>{todo.description}</p>
+        </div>
+      ))}
+    </div>
+
+  )
+}
+```
+- now we will make a custom hook to fetch data
+```js
+import { useState, useEffect } from "react";
+import axios from "axios";
+// seperate the logic of fetching data from app component
+// now this hook can be used in multiple component without fetching data multiple time
+function useFetch(url){
+  const [data,setData]= useState([]); 
+  useEffect(()=>{
+    axios.get(url)
+    .then(res=>{
+      setData(res.data.todos) 
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+  },[url]) 
+  return data;
+}
+export default useFetch;
+```
+- now we will use this hook in our app
+```js
+function App(){
+  const todos = useFetch("https://dummyjson.com/todos") // now data is fetched only once even if multiple component use this hook
+  return(
+    <div>
+      {todos.map((todo)=>(
+        <div key={todo.id}>
+          <h1>{todo.title}</h1>
+          <p>{todo.description}</p>
+        </div>
+      ))}
+    </div>
+
+  )
+}
+```
+### Auto refreshing hooks
+- useEffect hook is used to call a function or code when the component mounts or updates.
+- use setInterval in a useEffect that repeatedly calls a function or executes a code snippet at specified intervals (in milliseconds).
+```js
+function dataFetching(n){
+  const [data,setData] = useState([]);
+  useEffect(()=>{
+    const interval = setInterval(()=>{
+      fetch("https://dummyjson.com/todos/1")
+      .then(res=>res.json())
+      .then(json=>{
+        setData(json)
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+    },n*1000) // 1000ms = 1s
+    // Solution to the problem of memory leak and double fetching
+    return () => clearInterval(interval); // cleanup on unmount
+  },[n]) // if n changes interval will be reset[Problem]
+  return data;
+}
+```
+#### swr- React Hooks for Data Fetching
+```js
+import useSWR from 'swr'
+ 
+function Profile() {
+  const { data, error, isLoading } = useSWR('/api/user', fetcher)
+ 
+  if (error) return <div>failed to load</div>
+  if (isLoading) return <div>loading...</div>
+  return <div>hello {data.name}!</div>
+}
+```
+- SWR is a React Hooks library for data fetching that provides features like caching, revalidation, focus tracking, and more to enhance the performance and user experience of web applications.
+- SWR stands for "stale-while-revalidate," a cache invalidation strategy that allows you to display stale data while revalidating it in the background.
+- It simplifies the process of fetching data in React applications by providing a set of hooks that manage
+
+### useOnline Hook
+- This hook allows you to track the online/offline status of the user's browser.
+- It returns a boolean value indicating whether the user is currently online or offline.
+- It uses the `navigator.onLine` property and listens for the `online` and `offline` events to update the status in real-time.
+- The hook returns `true` when the user is online and `false` when they are offline.
+- The hook is useful for applications that need to make decisions based on the online/offline status of the user's browser.
+```js
+function useOnline() {
+  // Initialize state with the current online status
+  const [online, setOnline] = useState(window.navigator.onLine);
+  useEffect(() => {
+    // Event listeners to update the online status
+    window.addEventListener("online", () => setOnline(true));
+    window.addEventListener("offline", () => setOnline(false));
+    // cleanup function to remove event listeners when the component unmounts
+    // returns this function from useEffect when called again before running useEffect 
+    return () => {
+      window.removeEventListener("online", () => setOnline(true));
+      window.removeEventListener("offline", () => setOnline(false));
+    };
+  }, []);
+  return online;
+}
+```
+### MousePointer Hook
+- This hook allows you to track the position of the mouse pointer on the screen.
+- It returns an object containing the `x` and `y` coordinates of the mouse pointer.
+```js 
+function useMousePointer() {
+  // Initialize state with the current mouse position
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  useEffect(() => {
+    // Event listener to update the mouse position
+    const updateMousePosition = (e) => {
+      setPosition({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener("mousemove", updateMousePosition);
+    // cleanup function to remove event listener when the component unmounts
+    return () => {
+      window.removeEventListener("mousemove", updateMousePosition);
+    };
+  }, []);
+  return position;
+}
+```
+### useDimension hooks
+- This hook allows you to track the dimensions of the browser window.
+- It returns an object containing the `width` and `height` of the window.
+```js
+function useDimension() {
+  // Initialize state with the current window dimensions
+  const [dimension, setDimension] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+  useEffect(() => {
+    // Event listener to update the window dimensions
+    const updateDimension = () => {
+      setDimension({ width: window.innerWidth, height: window.innerHeight });
+    };
+    // attach the event listener to the window resize event
+    window.addEventListener("resize", updateDimension);
+    // cleanup function to remove event listener when the component unmounts
+    return () => {
+      window.removeEventListener("resize", updateDimension);
+    };
+  }, []);
+  return dimension;
+}
+```
+### useInterval Hook
+- This hook allows you to set up an interval that repeatedly calls a function at specified intervals (in milliseconds).
+- It takes two arguments: a callback function to be executed at each interval and the delay (in milliseconds) between each execution.
+- The hook sets up the interval when the component mounts and clears it when the component unmounts or when the delay changes.
+```js
+function useInterval(callback, delay) {
+  useEffect(()=>{
+    setInterval(()=>{
+      callback()
+    },delay)
+    return ()=>{
+      clearInterval()
+    }
+  })
+
+}
+```
+### debounce Hook
+- This hook allows you to debounce a function, which means it will only be called after a specified delay has passed since the last time it was invoked.
+- use in search bar to stop api calls on every key stroke
+```js
+function useDebounce(value, delay) {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value,delay]);
+  return debouncedValue;
+}
+```
+```js
+function App(){
+  const [text,setText] = useState("")
+  const debouncedFunction = useDebounce((value)=>{
+    console.log(value)
+  },5000)
+  return (
+    <div>
+      <input type="text" value={text} onChange={(e)=>{
+        setText(e.target.value)
+        debouncedFunction(e.target.value)
+      }}/>
+    </div>
+  )
+}
+```
