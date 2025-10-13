@@ -103,3 +103,64 @@ const emp: ManagementEmployee = {
 let numbers: number[] = [1, 2, 3, 4, 5]; // array of numbers
 let strings: Array<string> = ["a", "b", "c"]; // array of strings
 ```
+### Enums
+- Enums are a way to define a set of named constants.
+- make constant values more readable.
+- used when you have limited set of values to choose from for a variable or function.
+```typescript
+enum Direction {
+    Up,
+    Down,
+    Left,
+    Right
+}
+```
+- You can access the enum values using the dot notation.
+- `console.log(Direction.Up); // 0`
+- `console.log(Direction.Down); // 1`
+- You can also assign string values to enums.
+```typescript
+enum Status {
+    Active = "ACTIVE",
+    Inactive = "INACTIVE",
+    Pending = "PENDING"
+}
+```
+- By default, enums are assigned numeric values starting from 0.
+```typescript
+enum Color {
+    Red = 1,
+    Green,
+    Blue
+}
+``` 
+### Generics
+- Generics are a way to create reusable components.
+- They allow you to define a component that can work with any data type.
+- They provide a way to create components that can work with different data types while still maintaining type safety.
+```typescript
+// <T> is a placeholder for a data type that will be specified when the function is called.
+// arg: T means that arg is of type T.
+// The function returns a value of type T.
+function identity<T>(arg: T): T {
+    return arg;
+}
+let output1 = identity<string>("Hello"); // output1 is of type string
+let output2 = identity<number>(123); // output2 is of type number
+``` 
+### Import and Export
+- You can use `export` to export variables, functions, classes, interfaces, types, and enums from a module.
+- You can use `import` to import variables, functions, classes, interfaces, types, and enums from a module.
+```typescript   
+// math.ts
+export function add(a: number, b: number): number {
+    return a + b;
+}   
+export const PI = 3.14;
+```
+```typescript
+// main.ts
+import { add, PI } from "./math";
+console.log(add(1, 2)); // 3
+console.log(PI); // 3.14
+```
