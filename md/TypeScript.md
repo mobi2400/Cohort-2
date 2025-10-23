@@ -164,3 +164,56 @@ import { add, PI } from "./math";
 console.log(add(1, 2)); // 3
 console.log(PI); // 3.14
 ```
+# Advance TypeScript Concepts
+
+## Pick
+- `Pick` is a utility type that allows you to create a new type by selecting specific properties from an existing type.
+```typescript
+type Person = {
+    name: string;
+    age: number;
+    email: string;
+};
+type NameAndAge = Pick<Person, "name" | "age">; // NameAndAge has properties name and age
+const person: NameAndAge = {
+    name: "John",
+    age: 25
+};
+// email property is not included in NameAndAge type
+```
+## Partial
+- `Partial` is a utility type that allows you to create a new type by making all properties of an existing type optional.
+```typescript
+type Person = {
+    name: string;
+    age: number;
+    email: string;
+};
+type PartialPerson = Partial<Person>; // PartialPerson has all properties of Person set to optional
+const person: PartialPerson = {
+    name: "John"
+};
+// age and email properties are not included in PartialPerson type
+```
+## Readonly
+- `Readonly` is a utility type that allows you to create a new type by making all properties of an existing type read-only.
+```typescript
+type Person = {
+    name: string;
+    age: number;
+    email: string;
+};
+type ReadonlyPerson = Readonly<Person>; // ReadonlyPerson has all properties of Person set to read-only
+// or
+type ReadonlyPerson = {
+    readonly name: string;
+    readonly age: number;
+    readonly email: string;
+}
+const person: ReadonlyPerson = {
+    name: "John",
+    age: 25,
+    email: "d9Aq0@example.com"
+};
+person.name = "Jane"; // Error: Cannot assign to 'name' because it is a read-only property
+```
